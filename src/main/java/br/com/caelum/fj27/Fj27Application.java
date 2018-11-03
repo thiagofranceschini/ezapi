@@ -12,3 +12,4 @@ public class Fj27Application {
 		SpringApplication.run(Fj27Application.class, args);
 	}
 }
+	

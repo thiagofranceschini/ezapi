@@ -6,10 +6,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import br.com.caelum.fj27.model.User;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -24,7 +27,18 @@ public class SwaggerConfiguration {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.caelum.fj27")).paths(PathSelectors.ant("/api/**"))
-				.build().apiInfo(apiInfo()).globalResponseMessage(RequestMethod.GET,
+				.build()
+				.ignoredParameterTypes(User.class)
+				.globalOperationParameters(
+						Arrays.asList(
+								new ParameterBuilder().name("Authorization")
+								.description("HEADER PARA FACILITAR O ENVIO DE BEARER")
+								.modelRef(new ModelRef("string"))
+								.parameterType("header")
+								.required(false)
+								.build()))
+				
+				.apiInfo(apiInfo()).globalResponseMessage(RequestMethod.GET,
 						Arrays.asList(
 								new ResponseMessageBuilder().code(500).message("Xi... Algum programador...").build(),
 								new ResponseMessageBuilder().code(403)
